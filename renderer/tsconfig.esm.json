@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "outDir": "./.package",
+        "rootDir": "./",
+        "strict": true,
+        "esModuleInterop": true,
+        "moduleResolution": "bundler",
+        "sourceMap": false
+    },
+    "include": ["src/**/*"]
+}
