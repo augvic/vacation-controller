@@ -3,3 +3,5 @@ package
 node_modules
 renderer_export
 *.db
+.package
+.renderer

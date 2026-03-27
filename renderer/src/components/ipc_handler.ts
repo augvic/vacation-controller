@@ -10,6 +10,16 @@ export class IpcHandler {
         }
     }
     
+    async updateDueDate(id: number, dueDate: string) {
+        try {
+            return window.api.updateDueDate({ userId: id, dueDate: dueDate });
+        } catch(error) {
+            const err = new Error(`Error in (IpcHandler) component in (sendAdmission) method: ${error}.`);
+            err.name = "";
+            throw err;
+        }
+    }
+    
     async getUsers() {
         try {
             return window.api.getUsers();

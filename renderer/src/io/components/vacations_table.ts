@@ -112,7 +112,7 @@ export class VacationsTableBody {
         try {
             const getVacationsTask = new GetVacations();
             setTimeout(async () => {
-                const userId = document.getElementById("edit-modal-user-id")!.innerText;
+                const userId = document.getElementById("edit-modal-user-id")!.innerText[0];
                 const response = await getVacationsTask.execute({ userId: parseInt(userId) });
                 if (!response.success) {
                     new Notification(response.message, "red");

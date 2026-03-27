@@ -1,5 +1,6 @@
 import { Icon } from "./icon.js";
 import { CreateVacation } from "../../tasks/create_vacation.js";
+import { UpdateDueDate } from "../../tasks/update_due_date.js";
 import { Notification } from "./notification.js";
 import { VacationsTableBody } from "./vacations_table.js";
 import { VacationsTableWrapper } from "./vacations_table.js";
@@ -129,23 +130,42 @@ class ContainerBody {
 
 class Info {
     
-    element!: HTMLDivElement
+    wrapper!: HTMLDivElement
+    label!: HTMLDivElement
+    input!: HTMLInputElement
+    input_n!: HTMLDivElement
     
     constructor(appendTo: HTMLElement, value: string, id: string, hidden: boolean, prefix: string) {
         this.createSelf(value, id, hidden, prefix);
-        appendTo.appendChild(this.element);
+        appendTo.appendChild(this.wrapper);
     }
     
     private createSelf(value: string, id: string, hidden: boolean, prefix: string) {
-        this.element = document.createElement("div");
-        this.element.innerText = `${prefix}: ${value}`;
+        this.wrapper = document.createElement("div");
+        this.wrapper.className = "h-auto w-full flex gap-x-2 justify-start items-center";
+        this.wrapper.id = `edit-modal-${id}`;
+        this.label = document.createElement("div");
+        this.label.className = "cursor-default flex w-auto h-auto justify-center";
+        this.label.innerText = `${prefix}:`;
+        this.input = document.createElement("input");
+        this.input.className = "w-auto h-auto";
+        this.input.value = value;
+        this.input_n = document.createElement("div");
+        this.input_n.className = "w-auto h-auto";
+        this.input_n.innerText = value;
         if (id == "user-id") {
-            this.element.innerText = `${value}`;
+            this.label.innerText = `${value}`;
         }
-        this.element.id = `edit-modal-${id}`;
-        this.element.className = "w-auto h-auto cursor-default";
+        this.wrapper.appendChild(this.label);
+        if (prefix == "Vence Em") {
+            this.wrapper.appendChild(this.input);
+            this.input.id = "admission-input";
+            new SendAdmissionButton(this.wrapper);
+        } else {
+            this.wrapper.appendChild(this.input_n);
+        }
         if (hidden) {
-            this.element.style.display = "none";
+            this.wrapper.style.display = "none";
         }
     }
     
@@ -202,7 +222,7 @@ class AddButton {
     private startListeners() {
         this.element.addEventListener("click", async () => {
             const createVacationTask = new CreateVacation();
-            const userId = document.getElementById("edit-modal-user-id")!.innerText;
+            const userId = document.getElementById("edit-modal-user-id")!.innerText[0];
             const user = (document.getElementById("edit-modal-name")! as HTMLDivElement).innerText;
             const begin = (document.getElementById("edit-modal-begin")! as HTMLInputElement).value;
             const end = (document.getElementById("edit-modal-end")! as HTMLInputElement).value;
@@ -215,6 +235,46 @@ class AddButton {
                 document.getElementById("edit-modal-status")!.innerText = `Status: ${response.data.status}`;
                 document.getElementById("users-table-body")!.remove();
                 new Body(document.getElementById("users-table")!);
+            } else {
+                new Notification(response.message, "red");
+            }
+        });
+    }
+    
+}
+
+class SendAdmissionButton {
+    
+    element!: HTMLButtonElement
+    icon!: Icon
+    
+    constructor(appendTo: HTMLElement) {
+        this.createSelf();
+        this.createComponents();
+        this.startListeners();
+        appendTo.appendChild(this.element);
+    }
+    
+    private createSelf() {
+        this.element = document.createElement("button");
+        this.element.className = "w-auto h-auto p-1 bg-green-700 hover:bg-green-900 cursor-pointer rounded-md transition-colors duration-300";
+    }
+    
+    private createComponents() {
+        this.icon = new Icon("./storage/icons/plus.png", 5, this.element);
+    }
+    
+    private startListeners() {
+        this.element.addEventListener("click", async () => {
+            const updateDueDateTask = new UpdateDueDate();
+            const userId = document.getElementById("edit-modal-user-id")!.innerText[0];
+            const inputValue = (document.getElementById("admission-input")! as HTMLInputElement).value;
+            console.log(userId);
+            console.log(inputValue);
+            const response = await updateDueDateTask.execute(parseInt(userId), inputValue);
+            console.log(response);
+            if (response.success) {
+                new Notification(response.message, "green");
             } else {
                 new Notification(response.message, "red");
             }

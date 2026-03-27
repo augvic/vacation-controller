@@ -6,6 +6,7 @@ import { DeleteUser } from "../tasks/delete_user";
 import { CreateVacation } from "../tasks/create_vacation";
 import { GetVacations } from "../tasks/get_vacations";
 import { DeleteVacation } from "../tasks/delete_vacation";
+import { UpdateDueDate } from "../tasks/update_due_date";
 
 export class App {
     
@@ -15,6 +16,7 @@ export class App {
     createVacationTask: CreateVacation
     getVacationsTask: GetVacations
     deleteVacationTask: DeleteVacation
+    updateDueDateTask: UpdateDueDate
 
     
     constructor() {
@@ -32,6 +34,7 @@ export class App {
         this.createVacationTask = new CreateVacation();
         this.getVacationsTask = new GetVacations();
         this.deleteVacationTask = new DeleteVacation();
+        this.updateDueDateTask = new UpdateDueDate();
     }
     
     private startIpcHandler(win: any) {
@@ -82,6 +85,13 @@ export class App {
         ipcMain.handle("vacation:delete", (event, data) => {
             try {
                 return this.deleteVacationTask.execute(data.id);
+            } catch(error) {
+                return { success: false, message: error }
+            }
+        });
+        ipcMain.handle("dueDate:update", (event, data) => {
+            try {
+                return this.updateDueDateTask.execute(data.userId, data.dueDate);
             } catch(error) {
                 return { success: false, message: error }
             }

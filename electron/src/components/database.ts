@@ -48,6 +48,14 @@ export class DbHandler {
         }
     }
     
+    updateDueDate(id: number, dueDate: string) {
+        try {
+            this.db.prepare(`UPDATE users SET admission = '${dueDate}' WHERE id = ${id}`).run();
+        } catch(error) {
+            throw new Error(`Error in (Database) component in (updateDueDate) method: ${error}.`);
+        }
+    }
+    
     updateUser(id: number, daysLeft: number, status: string, dueDate: string | null) {
         try {
             if (dueDate != null) {
