@@ -54,7 +54,7 @@ export class CreateVacation {
             } else {
                 status = "Marcado Completamente";
             }
-            this.db.updateUser(userId, newDaysLeft, status, null);
+            this.db.updateUser(userId, newDaysLeft, status, null, null);
             this.logSystem.write_text(`✅ Registro de férias adicionado.`);
             return { success: true, message: `✅ Registro de férias adicionado.`, data: { status: status, daysLeft: String(newDaysLeft) } };
         } catch(error) {

@@ -37,7 +37,7 @@ export class DeleteVacation {
             } else {
                 status = "Marcado Parcial";
             }
-            this.db.updateUser(parseInt(userId), userNewDaysLeft, status, null);
+            this.db.updateUser(parseInt(userId), userNewDaysLeft, status, null, null);
             return { success: true, message: `✅ Registro excluído.`, data: { status: status, daysLeft: String(userNewDaysLeft) } };
         } catch(error) {
             this.logSystem.write_error(`❌ Error in (DeleteVacation) task: ${error}.`);

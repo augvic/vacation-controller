@@ -21,6 +21,7 @@ export class DbHandler {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user TEXT NOT NULL,
                     admission TEXT NOT NULL,
+                    limitValue TEXT NOT NULL,
                     status TEXT NOT NULL,
                     daysLeft TEXT NOT NULL
                 )
@@ -40,9 +41,9 @@ export class DbHandler {
         }
     }
     
-    createUser(user: string, admission: string) {
+    createUser(user: string, admission: string, limit: string) {
         try {
-            this.db.prepare("INSERT INTO users (user, admission, status, daysLeft) VALUES (?, ?, ?, ?)").run(user, admission, "Não Marcado", "30");
+            this.db.prepare("INSERT INTO users (user, admission, limitValue, status, daysLeft) VALUES (?, ?, ?, ?, ?)").run(user, admission, limit, "Não Marcado", "30");
         } catch(error) {
             throw new Error(`Error in (Database) component in (createUser) method: ${error}.`);
         }
@@ -56,10 +57,10 @@ export class DbHandler {
         }
     }
     
-    updateUser(id: number, daysLeft: number, status: string, dueDate: string | null) {
+    updateUser(id: number, daysLeft: number, status: string, dueDate: string | null, limit: string | null) {
         try {
-            if (dueDate != null) {
-                this.db.prepare(`UPDATE users SET daysLeft = ${daysLeft}, status = '${status}', admission = '${dueDate}' WHERE id = ${id}`).run();
+            if (dueDate != null || limit != null) {
+                this.db.prepare(`UPDATE users SET daysLeft = ${daysLeft}, status = '${status}', admission = '${dueDate}', limit = '${limit}' WHERE id = ${id}`).run();
             } else {
                 this.db.prepare(`UPDATE users SET daysLeft = ${daysLeft}, status = '${status}' WHERE id = ${id}`).run();
             }
@@ -70,7 +71,7 @@ export class DbHandler {
     
     readUser(id: number) {
         try {
-            return this.db.prepare(`SELECT * FROM users WHERE id = ${id}`).all() as [{ id: number; user: string; admission: string, status: string, daysLeft: string }];
+            return this.db.prepare(`SELECT * FROM users WHERE id = ${id}`).all() as [{ id: number; user: string; admission: string, status: string, daysLeft: string, limitValue: string }];
         } catch(error) {
             throw new Error(`Error in (Database) component in (readUser) method: ${error}.`);
         }
@@ -78,7 +79,7 @@ export class DbHandler {
     
     readAllUsers() {
         try {
-            return this.db.prepare("SELECT * FROM users").all() as [{ id: number; user: string; admission: string; status: string; daysLeft: string }];
+            return this.db.prepare("SELECT * FROM users").all() as [{ id: number; user: string; admission: string; status: string; daysLeft: string, limitValue: string }];
         } catch(error) {
             throw new Error(`Error in (Database) component in (readAllUsers) method: ${error}.`);
         }

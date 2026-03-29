@@ -20,8 +20,9 @@ export class GetUsers {
                 const dueDate = new Date(year, month - 1, day).getTime();
                 if (today >= dueDate) {
                     const newDueDate = new Date(year + 1, month - 1, day).toLocaleDateString("pt-BR");
+                    const newLimit = new Date(year + 2, month - 1, day).toLocaleDateString("pt-BR");
                     this.db.deleteAllVacations(user.id);
-                    this.db.updateUser(user.id, 30, "Não Marcado", newDueDate);
+                    this.db.updateUser(user.id, 30, "Não Marcado", newDueDate, newLimit);
                 }
             });
             this.logSystem.write_text(`✅ Funcionários coletados.`);

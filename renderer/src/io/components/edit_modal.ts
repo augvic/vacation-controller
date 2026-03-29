@@ -11,9 +11,9 @@ export class EditModal {
     element!: HTMLDivElement
     container!: Container
     
-    constructor(id: string, user: string, admission: string, status: string, daysLeft: string) {
+    constructor(id: string, user: string, admission: string, limit: string, status: string, daysLeft: string) {
         this.createSelf();
-        this.createComponents(id, user, admission, status, daysLeft);
+        this.createComponents(id, user, admission, limit, status, daysLeft);
         document.getElementById("app-body")!.appendChild(this.element);
     }
     
@@ -23,8 +23,8 @@ export class EditModal {
         this.element.className = "w-full h-full bg-black/70 flex justify-center items-center fixed z-50";
     }
     
-    private createComponents(id: string, user: string, admission: string, status: string, daysLeft: string) {
-        this.container = new Container(this.element, id, user, admission, status, daysLeft);
+    private createComponents(id: string, user: string, admission: string, limit: string,  status: string, daysLeft: string) {
+        this.container = new Container(this.element, id, user, admission, limit, status, daysLeft);
     }
     
 }
@@ -35,9 +35,9 @@ class Container {
     titleBar!: TitleBar
     body!: ContainerBody
     
-    constructor(appendTo: HTMLElement, id: string, user: string, admission: string, status: string, daysLeft: string) {
+    constructor(appendTo: HTMLElement, id: string, user: string, admission: string, limit: string, status: string, daysLeft: string) {
         this.createSelf();
-        this.createComponents(id, user, admission, status, daysLeft);
+        this.createComponents(id, user, admission, limit, status, daysLeft);
         appendTo.appendChild(this.element);
     }
     
@@ -46,9 +46,9 @@ class Container {
         this.element.className = "w-auto h-auto bg-white rounded-lg p-3 flex flex-col gap-y-2";
     }
     
-    private createComponents(id: string, user: string, admission: string, status: string, daysLeft: string) {
+    private createComponents(id: string, user: string, admission: string, limit: string, status: string, daysLeft: string) {
         this.titleBar = new TitleBar(this.element);
-        this.body = new ContainerBody(this.element, id, user, admission, status, daysLeft);
+        this.body = new ContainerBody(this.element, id, user, admission, limit, status, daysLeft);
     }
     
 }
@@ -103,9 +103,9 @@ class ContainerBody {
     
     element!: HTMLDivElement
     
-    constructor(appendTo: HTMLElement, id: string, user: string, admission: string, status: string, daysLeft: string) {
+    constructor(appendTo: HTMLElement, id: string, user: string, admission: string, limit: string, status: string, daysLeft: string) {
         this.createSelf();
-        this.createComponents(id, user, admission, status, daysLeft);
+        this.createComponents(id, user, admission, limit, status, daysLeft);
         appendTo.appendChild(this.element);
     }
     
@@ -114,10 +114,11 @@ class ContainerBody {
         this.element.className = "w-full h-auto flex flex-col justify-center items-center gap-y-2";
     }
     
-    private createComponents(id: string, user: string, admission: string, status: string, daysLeft: string) {
+    private createComponents(id: string, user: string, admission: string, limit: string, status: string, daysLeft: string) {
         new Info(this.element, id, "user-id", true, "ID");
         new Info(this.element, user, "name", false, "Nome");
         new Info(this.element, admission, "admission", false, "Vence Em");
+        new Info(this.element, limit, "limit", false, "Data Limite");
         new Info(this.element, status, "status", false, "Status");
         new Info(this.element, daysLeft, "days-left", false, "Dias Restantes");
         new Input(this.element, "Início do Período:", "begin", "date", "Início:");

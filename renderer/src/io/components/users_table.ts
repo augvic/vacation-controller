@@ -67,11 +67,12 @@ class Header {
     }
     
     private createComponents() {
-        new HeaderCell(this.element, "Nome", 1);
-        new HeaderCell(this.element, "Vence Em", 2);
-        new HeaderCell(this.element, "Status", 3);
-        new HeaderCell(this.element, "Dias Restantes", 4);
-        new HeaderCell(this.element, "", 5);
+        new HeaderCell(this.element, "Nome:", 1);
+        new HeaderCell(this.element, "Vence Em:", 2);
+        new HeaderCell(this.element, "Data Limite:", 3);
+        new HeaderCell(this.element, "Status:", 4);
+        new HeaderCell(this.element, "Dias Restantes:", 5);
+        new HeaderCell(this.element, "", 6);
     }
     
 }
@@ -122,8 +123,9 @@ export class Body {
             let admissionCells: HTMLElement[] = [];
             let statusCells: HTMLElement[] = [];
             let daysLeftCells: HTMLElement[] = [];
+            let limitCells: HTMLElement[] = [];
             users.forEach(user => {
-                new BodyRow(this.element, userCells, admissionCells, statusCells, daysLeftCells, user.id, user.user, user.admission, user.status, user.daysLeft);
+                new BodyRow(this.element, userCells, admissionCells, limitCells, statusCells, daysLeftCells, user.id, user.user, user.admission, user.limitValue, user.status, user.daysLeft);
             });
         } catch(error) {
             new Notification(`${error}`, "red");
@@ -136,9 +138,9 @@ class BodyRow {
     
     element!: HTMLDivElement
     
-    constructor(appendTo: HTMLElement, userCells: HTMLElement[], admissionCells: HTMLElement[], statusCells: HTMLElement[], daysLeftCells: HTMLElement[], id: number, user: string, admission: string, status: string, daysLeft: string) {
+    constructor(appendTo: HTMLElement, userCells: HTMLElement[], admissionCells: HTMLElement[], limitCells: HTMLElement[], statusCells: HTMLElement[], daysLeftCells: HTMLElement[], id: number, user: string, admission: string, status: string, daysLeft: string, limit: string) {
         this.createSelf(user);
-        this.createComponents(userCells, admissionCells, statusCells, daysLeftCells, id, user, admission, status, daysLeft);
+        this.createComponents(userCells, admissionCells, limitCells, statusCells, daysLeftCells, id, user, admission, status, daysLeft, limit);
         appendTo.appendChild(this.element);
     }
     
@@ -148,14 +150,15 @@ class BodyRow {
         this.element.className = "h-auto w-auto flex user-row";
     }
     
-    private createComponents(userCells: HTMLElement[], admissionCells: HTMLElement[], statusCells: HTMLElement[], daysLeftCells: HTMLElement[], id:number, user: string, admission: string, status: string, daysLeft: string) {
+    private createComponents(userCells: HTMLElement[], admissionCells: HTMLElement[], limitCells: HTMLElement[], statusCells: HTMLElement[], daysLeftCells: HTMLElement[], id: number, user: string, admission: string, limit: string, status: string, daysLeft: string) {
         setTimeout(() => {
             new BodyRowIdCell(this.element, id);
             new BodyRowCell(this.element, userCells, user, 1);
             new BodyRowCell(this.element, admissionCells, admission, 2);
-            new BodyRowCell(this.element, statusCells, status, 3);
-            new BodyRowCell(this.element, daysLeftCells, daysLeft, 4);
-            new BodyRowButtonsCell(this.element, id, user, admission, status, daysLeft);
+            new BodyRowCell(this.element, limitCells, limit, 3);
+            new BodyRowCell(this.element, statusCells, status, 4);
+            new BodyRowCell(this.element, daysLeftCells, daysLeft, 5);
+            new BodyRowButtonsCell(this.element, id, user, limit, admission, status, daysLeft);
         }, 500);
     }
     
@@ -198,9 +201,9 @@ class BodyRowButtonsCell {
     icon!: Icon
     deleteIcon!: Icon
     
-    constructor(appendTo: HTMLElement, id: number, user: string, admission: string, status: string, daysLeft: string) {
+    constructor(appendTo: HTMLElement, id: number, user: string, admission: string, limit: string, status: string, daysLeft: string) {
         this.createSelf();
-        this.startListeners(id, user, admission, status, daysLeft);
+        this.startListeners(id, user, admission, limit, status, daysLeft);
         appendTo.appendChild(this.element);
     }
     
@@ -217,9 +220,9 @@ class BodyRowButtonsCell {
         this.element.appendChild(this.deleteButton);
     }
     
-    private startListeners(id: number, user: string, admission: string, status: string, daysLeft: string) {
+    private startListeners(id: number, user: string, admission: string, limit: string, status: string, daysLeft: string) {
         this.button.addEventListener("click", () => {
-            new EditModal(String(id), user, admission, status, daysLeft);
+            new EditModal(String(id), user, admission, limit, status, daysLeft);
         });
         this.deleteButton.addEventListener("click", async () => {
             const deleteUserTask = new DeleteUser();
