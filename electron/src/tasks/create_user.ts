@@ -25,12 +25,12 @@ export class CreateUser {
             let limit;
             if (today < dueDate) {
                 date = new Date(currentYear, month - 1, day).toLocaleDateString("pt-BR");
-                limit = new Date(currentYear + 1, month - 1, day).toLocaleDateString("pt-BR");
+                limit = new Date(currentYear + 1, month - 2, day).toLocaleDateString("pt-BR");
             } else {
                 date = new Date(currentYear + 1, month - 1, day).toLocaleDateString("pt-BR");
-                limit = new Date(currentYear + 2, month - 1, day).toLocaleDateString("pt-BR");
+                limit = new Date(currentYear + 2, month - 2, day).toLocaleDateString("pt-BR");
             }
-            this.db.createUser(user, date, limit);
+            this.db.createUser(user, admission, limit);
             this.logSystem.write_text(`✅ Funcionário (${user}) adicionado.`);
             return { success: true, message: `✅ Funcionário (${user}) adicionado.` };
         } catch(error) {

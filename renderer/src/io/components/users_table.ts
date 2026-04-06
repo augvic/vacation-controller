@@ -68,8 +68,8 @@ class Header {
     
     private createComponents() {
         new HeaderCell(this.element, "Nome:", 1);
-        new HeaderCell(this.element, "Vence Em:", 2);
-        new HeaderCell(this.element, "Data Limite:", 3);
+        new HeaderCell(this.element, "Limite:", 2);
+        // new HeaderCell(this.element, "Data Limite:", 3);
         new HeaderCell(this.element, "Status:", 4);
         new HeaderCell(this.element, "Dias Restantes:", 5);
         new HeaderCell(this.element, "", 6);
@@ -155,7 +155,7 @@ class BodyRow {
             new BodyRowIdCell(this.element, id);
             new BodyRowCell(this.element, userCells, user, 1);
             new BodyRowCell(this.element, admissionCells, admission, 2);
-            new BodyRowCell(this.element, limitCells, limit, 3);
+            // new BodyRowCell(this.element, limitCells, limit, 3);
             new BodyRowCell(this.element, statusCells, status, 4);
             new BodyRowCell(this.element, daysLeftCells, daysLeft, 5);
             new BodyRowButtonsCell(this.element, id, user, limit, admission, status, daysLeft);

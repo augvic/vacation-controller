@@ -49,9 +49,9 @@ export class DbHandler {
         }
     }
     
-    updateDueDate(id: number, dueDate: string) {
+    updateDueDate(id: number, dueDate: string, limit: string) {
         try {
-            this.db.prepare(`UPDATE users SET admission = '${dueDate}' WHERE id = ${id}`).run();
+            this.db.prepare(`UPDATE users SET admission = '${dueDate}', limitValue = '${limit}' WHERE id = ${id}`).run();
         } catch(error) {
             throw new Error(`Error in (Database) component in (updateDueDate) method: ${error}.`);
         }
@@ -60,7 +60,7 @@ export class DbHandler {
     updateUser(id: number, daysLeft: number, status: string, dueDate: string | null, limit: string | null) {
         try {
             if (dueDate != null || limit != null) {
-                this.db.prepare(`UPDATE users SET daysLeft = ${daysLeft}, status = '${status}', admission = '${dueDate}', limit = '${limit}' WHERE id = ${id}`).run();
+                this.db.prepare(`UPDATE users SET daysLeft = ${daysLeft}, status = '${status}', admission = '${dueDate}', limitValue = '${limit}' WHERE id = ${id}`).run();
             } else {
                 this.db.prepare(`UPDATE users SET daysLeft = ${daysLeft}, status = '${status}' WHERE id = ${id}`).run();
             }

@@ -117,8 +117,8 @@ class ContainerBody {
     private createComponents(id: string, user: string, admission: string, limit: string, status: string, daysLeft: string) {
         new Info(this.element, id, "user-id", true, "ID");
         new Info(this.element, user, "name", false, "Nome");
-        new Info(this.element, admission, "admission", false, "Vence Em");
-        new Info(this.element, limit, "limit", false, "Data Limite");
+        new Info(this.element, limit, "admission", false, "Limite");
+        // new Info(this.element, admission, "limit", false, "Data Limite");
         new Info(this.element, status, "status", false, "Status");
         new Info(this.element, daysLeft, "days-left", false, "Dias Restantes");
         new Input(this.element, "Início do Período:", "begin", "date", "Início:");
@@ -158,7 +158,7 @@ class Info {
             this.label.innerText = `${value}`;
         }
         this.wrapper.appendChild(this.label);
-        if (prefix == "Vence Em") {
+        if (prefix == "Limite") {
             this.wrapper.appendChild(this.input);
             this.input.id = "admission-input";
             new SendAdmissionButton(this.wrapper);

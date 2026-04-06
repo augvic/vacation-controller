@@ -112,7 +112,7 @@ class ContainerBody {
     
     private createComponents() {
         new Input(this.element, "Nome", "name", "text", "Nome:");
-        new Input(this.element, "Admissão", "admission", "date", "Admissão:");
+        new Input(this.element, "Admissão", "admission", "date", "Limite:");
         new AddButton(this.element);
     }
     

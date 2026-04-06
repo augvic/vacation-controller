@@ -13,7 +13,9 @@ export class UpdateDueDate {
     
     execute(userId: number, dueDate: string): { success: boolean, message: string } {
         try {
-            this.db.updateDueDate(userId, dueDate);
+            const [day, month, year] = dueDate.split("/").map(Number);
+            const limit = new Date(year + 1, month - 2, day).toLocaleDateString("pt-BR");
+            this.db.updateDueDate(userId, dueDate, limit);
             return { success: true, message: `✅ Data atualizada.` };
         } catch(error) {
             this.logSystem.write_error(`❌ Error in (UpdateDueDate) task: ${error}.`);
