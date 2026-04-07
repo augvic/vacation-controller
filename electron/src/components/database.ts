@@ -21,7 +21,6 @@ export class DbHandler {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user TEXT NOT NULL,
                     admission TEXT NOT NULL,
-                    limitValue TEXT NOT NULL,
                     status TEXT NOT NULL,
                     daysLeft TEXT NOT NULL
                 )
@@ -43,7 +42,7 @@ export class DbHandler {
     
     createUser(user: string, admission: string, limit: string) {
         try {
-            this.db.prepare("INSERT INTO users (user, admission, limitValue, status, daysLeft) VALUES (?, ?, ?, ?, ?)").run(user, admission, limit, "Não Marcado", "30");
+            this.db.prepare("INSERT INTO users (user, admission, status, daysLeft) VALUES (?, ?, ?, ?)").run(user, admission, "Não Marcado", "30");
         } catch(error) {
             throw new Error(`Error in (Database) component in (createUser) method: ${error}.`);
         }
@@ -51,7 +50,7 @@ export class DbHandler {
     
     updateDueDate(id: number, dueDate: string, limit: string) {
         try {
-            this.db.prepare(`UPDATE users SET admission = '${dueDate}', limitValue = '${limit}' WHERE id = ${id}`).run();
+            this.db.prepare(`UPDATE users SET admission = '${dueDate}' WHERE id = ${id}`).run();
         } catch(error) {
             throw new Error(`Error in (Database) component in (updateDueDate) method: ${error}.`);
         }
@@ -60,7 +59,7 @@ export class DbHandler {
     updateUser(id: number, daysLeft: number, status: string, dueDate: string | null, limit: string | null) {
         try {
             if (dueDate != null || limit != null) {
-                this.db.prepare(`UPDATE users SET daysLeft = ${daysLeft}, status = '${status}', admission = '${dueDate}', limitValue = '${limit}' WHERE id = ${id}`).run();
+                this.db.prepare(`UPDATE users SET daysLeft = ${daysLeft}, status = '${status}', admission = '${dueDate}' WHERE id = ${id}`).run();
             } else {
                 this.db.prepare(`UPDATE users SET daysLeft = ${daysLeft}, status = '${status}' WHERE id = ${id}`).run();
             }
